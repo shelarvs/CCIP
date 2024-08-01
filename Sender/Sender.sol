@@ -48,9 +48,7 @@ contract Sender is OwnerIsCreator {
     function sendMessage(
         uint64 destinationChainSelector,
         address receiver,
-        string calldata text,
-        address userAddress,
-        uint amount
+        string calldata text
     ) external onlyOwner returns (bytes32 messageId) {
         // Create an EVM2AnyMessage struct in memory with necessary information for sending a cross-chain message
         Client.EVM2AnyMessage memory evm2AnyMessage = Client.EVM2AnyMessage({
@@ -59,13 +57,7 @@ contract Sender is OwnerIsCreator {
             tokenAmounts: new Client.EVMTokenAmount[](0), // Empty array indicating no tokens are being sent
             extraArgs: Client._argsToBytes(
                 // Additional arguments, setting gas limit
-                Client.EVMExtraArgsV1(
-                    {
-                        gasLimit: 200_000,
-                        userAddress: userAddress,
-                        amount : amount
-                    })
- 
+                Client.EVMExtraArgsV1({gasLimit: 200_000})
             ),
             // Set the feeToken  address, indicating LINK will be used for fees
             feeToken: address(s_linkToken)
